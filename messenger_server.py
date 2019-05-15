@@ -3,6 +3,7 @@ from flask import Flask, request
 import requests
 import logging
 
+from response_message import GenerateResponseMessage
 
 from password import *
 
@@ -30,8 +31,9 @@ def verify_webhook(req):
 def respond(sender, message):
     """Formulate a response to the user and
     pass it on to a function that sends it."""
-    response = get_bot_response(message)
-    send_message(sender, response)
+    response = GenerateResponseMessage(message)
+    response_message = response.generate_response()
+    send_message(sender, response_message)
 
 
 def is_user_message(message):
