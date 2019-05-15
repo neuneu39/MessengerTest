@@ -5,21 +5,13 @@ import logging
 
 from response_message import GenerateResponseMessage
 
-from password import *
-
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
 FB_API_URL = 'https://graph.facebook.com/v3.1/me/messages'
-VERIFY_TOKEN = os.environ.get('VERIFY_TOKEN')
-PAGE_ACCESS_TOKEN = os.environ.get('PAGE_ACCESS_TOKEN')
-
-
-def get_bot_response(message):
-    """This is just a dummy function, returning a variation of what
-    the user said. Replace this function with one connected to chatbot."""
-    return "オウム返し '{}'".format(message)
+VERIFY_TOKEN = os.environ.get('VERIFY_TOKEN_FACEBOOK')
+PAGE_ACCESS_TOKEN = os.environ.get('PAGE_ACCESS_TOKEN_FACEBOOK')
 
 
 def verify_webhook(req):
@@ -29,8 +21,6 @@ def verify_webhook(req):
         return "incorrect"
 
 def respond(sender, message):
-    """Formulate a response to the user and
-    pass it on to a function that sends it."""
     response = GenerateResponseMessage(message)
     response_message = response.generate_response()
     send_message(sender, response_message)
@@ -43,7 +33,6 @@ def is_user_message(message):
             not message['message'].get("is_echo"))
 
 def send_message(recipient_id, text):
-    """Send a response to Facebook"""
     payload = {
         'message': {
             'text': text
