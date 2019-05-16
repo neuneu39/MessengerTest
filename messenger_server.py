@@ -1,6 +1,6 @@
 import os
-from flask import Flask, request
 import requests
+from flask import Flask, request
 import logging
 
 from response_message import GenerateResponseMessage
@@ -64,11 +64,11 @@ def listen():
 
     if request.method == 'POST':
         payload = request.json
-        event = payload['entry'][0]['messaging']
-        for x in event:
-            if is_user_message(x):
-                text = x['message']['text']
-                sender_id = x['sender']['id']
+        events = payload['entry'][0]['messaging']
+        for event in events:
+            if is_user_message(event):
+                text = event['message']['text']
+                sender_id = event['sender']['id']
                 respond(sender_id, text)
 
-        return "ok"
+        return True
